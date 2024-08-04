@@ -1,74 +1,83 @@
 <?php 
     include ("connexion.php");
+    session_start();
     // la methode POST du formulaire nous cache les donnees saisies
     // la methide GET du formulaire ne cache pas les donnees saisies et les envoies dans l url
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - Santé</title>
-    <link rel="stylesheet" href="style.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/fb93ded780.js" crossorigin="anonymous"></script>
-
+    <title>Connexion</title>
+    <!-- Inclusion de Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('assets/img/banniere.png'); /* Remplacez par l'URL de votre image */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            //background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+    </style>
 </head>
 <body>
-    
-    <header>
-        <?php 
-            include ("menu.php");
-        ?>
-    </header>
-
-    <main class="bg-light">
-    <section class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h1 class="card-title text-center">Connexion</h1>
-                        
-                        <form method="POST" >
-                            
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Email</label>
-                                <input type="email" id="username" name="email" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Mot de passe</label>
-                                <input type="password" id="password" name="password" class="form-control" required>
-                            </div>
-                            <button type="submit" name="submit" class="btn w-100 text-white" style="background-color: #4d0f0f;">Se connecter</button>
-                        </form>
-
-                        <?php 
+    <div class="container">
+        <h2 class="text-center">Connexion</h2>
+        <form  method="post">
+            <div class="form-group">
+                <label for="email">Email :</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">pwd:</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
+        </form>
+        <p class="text-center mt-3">Vous n'avez pas de compte ? <a href="register.php">Créez un compte</a></p>
+    </div>
+    <?php 
                             if ((!empty($_POST['email'])) && (!empty($_POST['password'])) ){
 
-                                $user = $_POST["email"];
+                                $email = $_POST["email"];
                                 $pwd = md5($_POST["password"]);
                                 
-                                //la table des utilisateurs 
-                                $users = $dba->prepare(" SELECT * FROM `pairs` ");
-                                $users->execute();
-                                $tableUsers = $users->fetchAll();
+                                //la table des visiteurs
+                                $requette = $dba->prepare(" SELECT * FROM `visiteur` ");
+                                $requette->execute();
+                                $tableUsers = $requette->fetchAll();
                                 $point = 0;
-                                //boucle sur les utilisateurs de la table Pairs
+                                //boucle sur les utilisateurs de la table visiteur
                                 foreach ( $tableUsers as $ligne ){
 
-                                    if ($ligne["Email"] == $user && $ligne["pwd"] == $pwd){
+                                    if ($ligne["email"] == $email && $ligne["pwd"] == $pwd){
 
+                                    
                                         $_SESSION["connecte"] = 1;
-                                        $_SESSION["role"] = $ligne["role"];
-                                        $_SESSION["nom"] = $ligne["Nom"];
-                                        $_SESSION["prenom"] = $ligne["Prenom"];
-                                        $_SESSION["email"] = $ligne["Email"];
-                                        $_SESSION["username"] = $ligne["username"];
+                                
+                                        $_SESSION["nom"] = $ligne["nom"];
+                                        $_SESSION["prenom"] = $ligne["prenom"];
+                                        $_SESSION["email"] = $ligne["email"];
+                                        $_SESSION["adresse"] = $ligne["adresse"];
+                                        $_SESSION["id_patient"] = $ligne["id"];
+                                       
+                                       
                                         $point = 1 ;
 
-                                        header('Location: user-info.php');
+                                        header('Location: Accueil.php');
                                     }
                                 }
 
@@ -81,40 +90,10 @@
                             
                         ?>
 
-                    </div>
 
-                </div>
-                <div class="mt-3 text-center">
-                    <p>Vous n'avez pas encore un compte ? Inscrivez-vous</p>
-                    <a href="register.php" class="btn btn-primary">Inscription</a>
-                    <p class="mt-2"><a href="reset_password.php">Mot de passe oublié ?</a></p> <!-- Bouton pour la réinitialisation de mot de passe -->
-                </div>
-
-            </div>
-        </div>
-    </section>
-</main>
-
-
-    <footer class="bg-light">
-        <section class="container" style="display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;">
-            <div class="footer-part">
-                <div class="footer-logo">
-                    <img src="images/Logo.png" alt="">
-                </div>
-                <div class="social-icons">
-                    <i class="fab fa-instagram"></i>
-                    <i class="fab fa-twitter"></i>
-                    <i class="fab fa-youtube"></i>
-                </div>
-                <div class="copyright">
-                    <p>Copyright &#169; 2023 STANIA</p>
-                </div>
-            </div>
-        </section>
-    </footer>
+    <!-- Inclusion de Bootstrap JS et des dépendances -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -20,6 +20,11 @@
       // la methode POST du formulaire nous cache les donnees saisies
       // la methide GET du formulaire ne cache pas les donnees saisies et les envoies dans l url
   ?>
+  <?php
+      
+      if ($_SESSION["connecte"] == 1){
+      
+  ?>
  
   <div class="container mt-5">
     <h2>Formulaire de Séjour à l'Hôpital</h2>
@@ -48,6 +53,26 @@
           <!-- Ajoutez d'autres options de spécialité ici -->
         </select>
       </div>
+      <div class="form-group">
+        <label for="specialite">Medecin</label>
+        <select class="form-control" id="medecin" name="medecin" required>
+          <option value="">Sélectionnez une Medecin</option>
+          <?php
+            //la table des visiteurs
+            $requette = $dba->prepare(" SELECT * FROM `medecins` ");
+            $requette->execute();
+            $tableMedecins = $requette->fetchAll();
+            foreach ($tableMedecins as $medecin) {
+              print('
+                <option value="'.$medecin['id'].'">
+                  Medecin '.$medecin['nom'].' '.$medecin["prenom"].' et de Specialite : '.$medecin['spécialité'].'
+                </option>
+              ');
+            }
+          ?>
+          <!-- Ajoutez d'autres options de spécialité ici -->
+        </select>
+      </div>
       <button type="submit" name="submit" class="btn btn-primary">Soumettre</button>
     </form>
   </div>
@@ -60,19 +85,37 @@
                 $date_fin = $_POST["dateFin"];
                 $motif = $_POST["motif"];
                 $sepcialite = $_POST["specialite"];
+                $medecin = $_POST["medecin"];
 
-                $visiteur = $dba->prepare("INSERT INTO `séjour`( `date_debut`, `data_fin`, `spécialité`, `motif`, `id_patient`) VALUES (?,?,?,?,?) ");
-                $visiteur->execute(array($date_debut,$date_fin,$sepcialite,$motif,$_SESSION["id_patient"]));
+                $visiteur = $dba->prepare("INSERT INTO `séjour`( `date_debut`, `data_fin`, `spécialité`, `motif`, `id_patient`, `id_medecin`) VALUES (?,?,?,?,?,?) ");
+                $visiteur->execute(array($date_debut,$date_fin,$sepcialite,$motif,$_SESSION["id_patient"],$medecin));
 
                 header("location: espace.php ");
 
             }
         ?>
 
- 
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+<?php 
+    }else{
+        header('Location: erreur.php');
+
+    }
+?>

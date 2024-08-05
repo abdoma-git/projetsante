@@ -35,7 +35,7 @@
 </head>
 <body>
     <div class="container">
-        <h2 class="text-center">Connexion</h2>
+        <h2 class="text-center">Connexion Administrateur</h2>
         <form  method="post">
             <div class="form-group">
                 <label for="email">Email :</label>
@@ -56,7 +56,7 @@
                                 $pwd = md5($_POST["password"]);
                                 
                                 //la table des visiteurs
-                                $requette = $dba->prepare(" SELECT * FROM `visiteur` ");
+                                $requette = $dba->prepare(" SELECT * FROM `administrateur` ");
                                 $requette->execute();
                                 $tableUsers = $requette->fetchAll();
                                 $point = 0;
@@ -71,13 +71,11 @@
                                         $_SESSION["nom"] = $ligne["nom"];
                                         $_SESSION["prenom"] = $ligne["prenom"];
                                         $_SESSION["email"] = $ligne["email"];
-                                        $_SESSION["adresse"] = $ligne["adresse"];
-                                        $_SESSION["id_patient"] = $ligne["id"];
                                        
                                        
                                         $point = 1 ;
 
-                                        header('Location: Accueil.php');
+                                        header('Location: espace_admin.php');
                                     }
                                 }
 

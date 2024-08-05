@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,6 +43,7 @@
       // la methode POST du formulaire nous cache les donnees saisies
       // la methide GET du formulaire ne cache pas les donnees saisies et les envoies dans l url
   ?>
+    
     <div class="banner">
       <h1>SoigneMoi</h1>
       <br>
@@ -48,6 +51,8 @@
       <br>
       <button class="btn btn-lg btn-warning mt-2 p-2"> Decouvrire </button>
     </div>
+
+    <?php include('footer.php') ;?>
 </body>
 
 </html>

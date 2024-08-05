@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <?php include('menu.php'); ?>
+    <?php include('menu_admin.php'); ?>
 
     <?php
       
@@ -27,7 +27,7 @@
                 <img src="https://img.freepik.com/vecteurs-premium/portrait-avatar-belle-femme-medecin-pour-medias-sociaux-illustration-vectorielle-lumineuse_590570-4.jpg " alt="avatar"
                 class="rounded-circle img-fluid" style="width: 150px;">
                 <h5 class="my-3"><?php echo $_SESSION['nom']." ". $_SESSION['prenom'] ?></h5>
-                <p class="text-muted mb-1">Patient</p>
+                <p class="text-muted mb-1">Administrateur</p>
                 <div class="d-flex justify-content-center mb-2">
                 </div>
             </div>
@@ -57,14 +57,7 @@
                 
                 <hr>
                 
-                <div class="row">
-                <div class="col-sm-3">
-                    <p class="mb-0">Address</p>
-                </div>
-                <div class="col-sm-9">
-                    <p class="text-muted mb-0"><?php echo $_SESSION['adresse'] ?></p>
-                </div>
-                </div>
+               
             </div>
             </div>
 
@@ -72,22 +65,21 @@
                 <div class="col-md-12">
                     <div class="card mb-4 mb-md-0">
                     <div class="card-body">
-                        <h4 class="my-3"> Mes Sejours </h4>
+                        <h4 class="my-3">Medecins </h4>
                     <table class="table">
                         <thead>
                             <tr>
-                            <th scope="col">Id Sejour</th>
-                            <th scope="col">Date Debut</th>
-                            <th scope="col">Date Fin</th>
-                            <th scope="col">Motif</th>
+                            <th scope="col">Id </th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Prenom</th>
                             <th scope="col">Specialite</th>
-                            <th scope="col"> Statut </th>
+                            <th scope="col">Matricule</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                                 //la table des visiteurs
-                                $requette = $dba->prepare(" SELECT * FROM `séjour` WHERE id_patient=".$_SESSION['id_patient']." ");
+                                $requette = $dba->prepare(" SELECT * FROM `medecins`");
                                 $requette->execute();
                                 $tableSejour = $requette->fetchAll();
                                 $dateActuelle = new DateTime();
@@ -97,25 +89,13 @@
                                     print('
                                         <tr>
                                             <th scope="row">'.$ligne["id"].'</th>
-                                            <td>'.$ligne["date_debut"].'</td>
-                                            <td>'.$ligne["data_fin"].'</td>
-                                            <td>'.$ligne["motif"].'</td>
+                                            <td>'.$ligne["nom"].'</td>
+                                            <td>'.$ligne["prenom"].'</td>
                                             <td>'.$ligne["spécialité"].'</td>
-                                            <td> ');
-
-                                            if ($ligne["data_fin"] > $dateActuelle) {
-                                                echo "La date de fin est passée.";
-                                            } elseif ($ligne["data_fin"] < $dateActuelle) {
-                                                echo "La date de fin est dans le futur.";
-                                            }
-                                    print('            
-                                            </td>
+                                            <td>'.$ligne["matricule"].'</td>
                                         </tr>
                                     ');
                                 }
-
-                            
-
                             ?>
                             
                         </tbody>

@@ -17,49 +17,17 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link text-light" href="Accueil.php"><b>Accueil</b></a>
+          <a class="nav-link text-light" href="espace_admin.php"><b>Mon espace</b></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" href="creer_medecin.php"><b>Medecins</b></a>
           
         </li>
         <li class="nav-item">
-          <a class="nav-link text-light" href="Sejour.php"><b>Sejour</b></a>
-          
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-light" href="espace.php"><b> Mon Espace </b></a>
+          <a class="nav-link text-light" href="creer_planning.php"><b> Plannings </b></a>
         </li>
       </ul>
 
-      <div class="form-inline">
-
-        <?php 
-
-            if (isset($_SESSION["connecte"])){
-
-                if ($_SESSION["connecte"] == 1){
-                    print ("
-                        <a href='deconnexion.php'> 
-                          <button class='text-light btn bg-black my-2 my-sm-0'>Se Déconnecter</button> 
-                        </a>
-                    ");
-                }else{
-                    print ("
-                        <a href='login.php'> 
-                          <button class='text-light btn bg-black my-2 my-sm-0'>Se Connecter</button> 
-                        </a>
-                    ");
-                }
-            }else{
-                print ("
-                        <a href='login.php'> 
-                          <button class='text-light btn bg-black my-2 my-sm-0'>Se Connecter</button> 
-                        </a>
-                    ");
-            }
-    
-
-        ?>
-        
-      </div>
     </div>
   </nav>
 
